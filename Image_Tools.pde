@@ -66,7 +66,7 @@ void image_rotate() {
   //image[original_height - x][y]                   // 90 degrees cw
   //image[original_height - y][original_width - x]  // 180 degrees
 
-  if (img.width > img.height) {
+  if (img.width < img.height) {
     PImage img2 = createImage(img.height, img.width, RGB);
     img.loadPixels();
     for (int x=1; x<img.width; x++) {
