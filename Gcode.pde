@@ -6,12 +6,14 @@
 void gcode_header() {
   OUTPUT.println("G21");
   OUTPUT.println("G90");
-  OUTPUT.println("G1 Z0");
+  // - R2 - changed for drawing robot from G1 Z0 to M05
+  OUTPUT.println("M5\nG4 P0.10000000149011612\nG1 F5000");
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 void gcode_trailer() {
-  OUTPUT.println("G1 Z0");
+  // - R2 - changed for drawing robot from G1 Z0 to M05
+  OUTPUT.println("M5\nG4 P0.10000000149011612\nG1 F5000");
   OUTPUT.println("G1 X" + gcode_format(0.1) + " Y" + gcode_format(0.1));
   OUTPUT.println("G1 X0 y0");
 }
@@ -84,11 +86,16 @@ void create_gcode_files (int line_count) {
         float gcode_scaled_y1 = d1.lines[i].y1 * gcode_scale + gcode_offset_y;
         float gcode_scaled_x2 = d1.lines[i].x2 * gcode_scale + gcode_offset_x;
         float gcode_scaled_y2 = d1.lines[i].y2 * gcode_scale + gcode_offset_y;
+        //float gcode_scaled_x1 = d1.lines[i].x1 ;
+        //float gcode_scaled_y1 = d1.lines[i].y1 ;
+        //float gcode_scaled_x2 = d1.lines[i].x2 ;
+        //float gcode_scaled_y2 = d1.lines[i].y2 ;
         distance = sqrt( sq(abs(gcode_scaled_x1 - gcode_scaled_x2)) + sq(abs(gcode_scaled_y1 - gcode_scaled_y2)) );
  
         if (x != gcode_scaled_x1 || y != gcode_scaled_y1) {
           // Oh crap, where the line starts is not where I am, pick up the pen and move there.
-          OUTPUT.println("G1 Z0");
+          // - R2 - changed for drawing robot from G1 Z0 to M05
+          OUTPUT.println("M5\nG4 P0.10000000149011612\nG1 F5000");
           is_pen_down = false;
           distance = sqrt( sq(abs(x - gcode_scaled_x1)) + sq(abs(y - gcode_scaled_y1)) );
           String buf = "G1 X" + gcode_format(gcode_scaled_x1) + " Y" + gcode_format(gcode_scaled_y1);
@@ -101,14 +108,16 @@ void create_gcode_files (int line_count) {
         
         if (d1.lines[i].pen_down) {
           if (is_pen_down == false) {
-            OUTPUT.println("G1 Z1");
+            // - R2 - changed for drawing robot from G1 Z1 to M3 S255
+            OUTPUT.println("M3 S255\nG4 P0.10000000149011612\nG1 F4000.000000");
             is_pen_down = true;
           }
           pen_drawing = pen_drawing + distance;
           lines_drawn++;
         } else {
           if (is_pen_down == true) {
-            OUTPUT.println("G1 Z0");
+            // - R2 - changed for drawing robot from G1 Z0 to M05
+            OUTPUT.println("M5\nG4 P0.10000000149011612\nG1 F5000");
             is_pen_down = false;
             pen_movement = pen_movement + distance;
             pen_lifts++;
@@ -151,31 +160,39 @@ void create_gcode_test_file () {
   
   OUTPUT.println("(Upper left)");
   OUTPUT.println("G1 X" + gcode_format(dx.min) + " Y" + gcode_format(dy.min + test_length));
-  OUTPUT.println("G1 Z1");
+  // - R2 - changed for drawing robot from Z1 to M3 S255
+  OUTPUT.println("M3 S255\nG4 P0.10000000149011612\nG1 F4000.000000");
   OUTPUT.println("G1 X" + gcode_format(dx.min) + " Y" + gcode_format(dy.min));
   OUTPUT.println("G1 X" + gcode_format(dx.min + test_length) + " Y" + gcode_format(dy.min));
-  OUTPUT.println("G1 Z0");
+  // - R2 - changed for drawing robot from G1 Z0 to M05
+  OUTPUT.println("M5\nG4 P0.10000000149011612\nG1 F5000");
 
   OUTPUT.println("(Upper right)");
   OUTPUT.println("G1 X" + gcode_format(dx.max - test_length) + " Y" + gcode_format(dy.min));
-  OUTPUT.println("G1 Z1");
+  // - R2 - changed for drawing robot from Z1 to M3 S255
+  OUTPUT.println("M3 S255\nG4 P0.10000000149011612\nG1 F4000.000000");
   OUTPUT.println("G1 X" + gcode_format(dx.max) + " Y" + gcode_format(dy.min));
   OUTPUT.println("G1 X" + gcode_format(dx.max) + " Y" + gcode_format(dy.min + test_length));
-  OUTPUT.println("G1 Z0");
+  // - R2 - changed for drawing robot from G1 Z0 to M05
+  OUTPUT.println("M5\nG4 P0.10000000149011612\nG1 F5000");
 
   OUTPUT.println("(Lower right)");
   OUTPUT.println("G1 X" + gcode_format(dx.max) + " Y" + gcode_format(dy.max - test_length));
-  OUTPUT.println("G1 Z1");
+  // - R2 - changed for drawing robot from Z1 to M3 S255
+  OUTPUT.println("M3 S255\nG4 P0.10000000149011612\nG1 F4000.000000");
   OUTPUT.println("G1 X" + gcode_format(dx.max) + " Y" + gcode_format(dy.max));
   OUTPUT.println("G1 X" + gcode_format(dx.max - test_length) + " Y" + gcode_format(dy.max));
-  OUTPUT.println("G1 Z0");
+  // - R2 - changed for drawing robot from G1 Z0 to M05
+  OUTPUT.println("M5\nG4 P0.10000000149011612\nG1 F5000");
 
   OUTPUT.println("(Lower left)");
   OUTPUT.println("G1 X" + gcode_format(dx.min + test_length) + " Y" + gcode_format(dy.max));
-  OUTPUT.println("G1 Z1");
+  // - R2 - changed for drawing robot from Z1 to M3 S255
+  OUTPUT.println("M3 S255\nG4 P0.10000000149011612\nG1 F4000.000000");
   OUTPUT.println("G1 X" + gcode_format(dx.min) + " Y" + gcode_format(dy.max));
   OUTPUT.println("G1 X" + gcode_format(dx.min) + " Y" + gcode_format(dy.max - test_length));
-  OUTPUT.println("G1 Z0");
+  // - R2 - changed for drawing robot from G1 Z0 to M05
+  OUTPUT.println("M5\nG4 P0.10000000149011612\nG1 F5000");
 
   gcode_trailer();
   OUTPUT.flush();
