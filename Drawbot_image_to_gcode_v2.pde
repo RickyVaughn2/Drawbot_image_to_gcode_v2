@@ -21,7 +21,7 @@ final float   paper_size_y = 22 * 10;
 final float   image_size_x = 32 * 10;
 final float   image_size_y = 20 * 10;
 final float   paper_top_to_origin = 0;      //mm, make smaller to move drawing down on paper
-final float   pen_width = 0.65;               //mm, determines image_scale, reduce, if solid black areas are speckled with white holes.
+final float   pen_width = 0.5;               //mm, determines image_scale, reduce, if solid black areas are speckled with white holes.
 final int     pen_count = 6;
 final char    gcode_decimal_seperator = '.';    
 final int     gcode_decimals = 2;             // Number of digits right of the decimal point in the gcode files.
@@ -218,8 +218,11 @@ void setup_squiggles() {
   gcode_scale_x = image_size_x / img.width;
   gcode_scale_y = image_size_y / img.height;
   gcode_scale = min(gcode_scale_x, gcode_scale_y);
-  gcode_offset_x = - (img.width * gcode_scale / 2.0);  
-  gcode_offset_y = - (paper_top_to_origin - (paper_size_y - (img.height * gcode_scale)) / 2.0);
+  //gcode_offset_x = - (img.width * gcode_scale / 2.0);  
+  //gcode_offset_y = - (paper_top_to_origin - (paper_size_y - (img.height * gcode_scale)) / 2.0);
+  // - R2 puts the image at the correct 0,0
+  gcode_offset_x =  0;  
+  gcode_offset_y =  0;
 
   screen_scale_x = width / (float)img.width;
   screen_scale_y = height / (float)img.height;
